@@ -1,3 +1,4 @@
+const { Headers } = require('undici');
 const env = require('../env');
 
 const headers = new Headers();
