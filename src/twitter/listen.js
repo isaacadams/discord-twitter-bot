@@ -1,6 +1,6 @@
 const { EventEmitter } = require('node:events');
 const needle = require('needle');
-const env = require('../env');
+const { headers } = require('./headers');
 
 (async () => {
   connect();
@@ -12,13 +12,11 @@ tweets.addListener('error', (e) => console.error(e));
 
 function connect() {
   try {
+    headers.append('User-Agent', 'v2SampleStreamJS');
     const stream = needle.get(
       'https://api.twitter.com/2/tweets/search/stream',
       {
-        headers: {
-          'User-Agent': 'v2SampleStreamJS',
-          Authorization: `Bearer ${env.TWITTER.BEARER}`,
-        },
+        headers: Object.fromEntries(headers.entries()),
         timeout: 20000,
       }
     );
