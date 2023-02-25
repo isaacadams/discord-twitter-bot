@@ -6,7 +6,9 @@
   "scripts": {
     "deploy:commands": "node src/deploy-commands.js",
     "twitter": "node src/twitter/listen.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo"
   },
   "keywords": [],
   "author": "",

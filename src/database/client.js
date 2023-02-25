@@ -1,13 +1,10 @@
 const { Sequelize } = require('sequelize');
-const config = require('./config');
+const config = require('../../config/config');
+const env = require('../env');
 
-const orm = new Sequelize('database', 'user', 'password', {
-  host: 'localhost',
-  dialect: 'sqlite',
-  logging: false,
-  // SQLite only
-  storage: config.pathToDatabase,
-});
+const orm = new Sequelize(
+  env.isProduction ? config.production : config.development
+);
 
 module.exports = {
   orm,
