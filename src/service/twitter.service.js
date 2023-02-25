@@ -1,4 +1,3 @@
-const getUserByIds = require('../twitter/getUserByIds');
 const rules = require('../twitter/rules');
 const user = require('../twitter/user');
 const { TwitterUsers } = require('../database').tables;
@@ -10,8 +9,7 @@ module.exports = {
    */
   getTwitterUsers: async () => {
     const ids = await getAllUserIds();
-
-    const users = await getUserByIds(...ids).catch(console.error);
+    const users = await user.getByIds(...ids).catch(console.error);
 
     return users.data.map((d) => ({
       id: d.id,
