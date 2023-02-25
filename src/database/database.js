@@ -1,10 +1,10 @@
 /* const Database = require('better-sqlite3');
 const db = new Database('foobar.db', { verbose: console.log }); */
 const Keyv = require('keyv');
-const config = require('./config');
+const { config } = require('./client');
 
 // One of the following
-const db = new Keyv('sqlite://' + config.pathToDatabase);
+const db = new Keyv('sqlite://' + config.storage);
 
 db.set('test', 1234);
 
