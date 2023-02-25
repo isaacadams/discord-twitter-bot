@@ -1,6 +1,7 @@
 //
 
 const needle = require('needle');
+const { error } = require('./error-handler');
 const { headers } = require('./headers');
 
 module.exports = function (...ids) {
@@ -12,17 +13,12 @@ module.exports = function (...ids) {
       },
       function (err, data) {
         if (err) {
-          rej(err);
-          return;
+          rej(error(err, response));
         } else {
           if (data.statusCode === 200) {
             res(data.body);
           } else {
-            rej({
-              statusCode: data.statusCode,
-              statusMessage: data.statusMessage,
-              error: data.body,
-            });
+            rej(error(err, response));
           }
         }
       }
