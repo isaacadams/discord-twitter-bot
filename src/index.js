@@ -3,6 +3,7 @@
 const { Events } = require('discord.js');
 const { client } = require('./client');
 const { twitterFeedChannel } = require('./database/database');
+const tables = require('./database/tables');
 const env = require('./env');
 const listen = require('./twitter/listen');
 require('./interactions');
@@ -26,6 +27,12 @@ listen.tweet$.subscribe(async (tweet) => {
   }
   const c = await client.channels.fetch(channelId);
   c.send(tweet.link);
+});
+
+client.once(Events.ClientReady, async () => {
+  console.log(`syncing orm`);
+  await tables.sync();
+  console.log(`sync success!`);
 });
 
 client.login(env.DISCORD.SECRET);
