@@ -1,5 +1,6 @@
 const getUserByIds = require('../twitter/getUserByIds');
 const rules = require('../twitter/rules');
+const user = require('../twitter/user');
 const { TwitterUsers } = require('../database').tables;
 
 module.exports = {
@@ -19,14 +20,31 @@ module.exports = {
     }));
   },
 
-  followUser: async (id) => {
+  followUser: async (twitterUsername) => {
+    const profile = await user
+      .getByUsername(twitterUsername, ['id', 'name'])
+      .catch((e) => {
+        console.error(e);
+        return undefined;
+      });
+
+    if (profile === undefined) {
+      throw 'could not find @' + twitterUsername;
+    }
+
     const ids = await getAllUserIds();
-    if (ids.indexOf(id) < 0) {
-      ids.push(id);
-      TwitterUsers.create({ userid: id }).catch(console.error);
+    const profileId = parseInt(profile.data.id);
+    if (ids.indexOf(profileId) < 0) {
+      console.log('adding ' + profile.data.name + ' to the feed');
+      ids.push(profileId);
+      TwitterUsers.create({ userid: profileId }).catch(console.error);
+    } else {
+      throw 'already following @' + twitterUsername;
     }
 
     await _resetRules(ids);
+
+    return true;
   },
 
   resetRules: async () => {
