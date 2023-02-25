@@ -1,0 +1,20 @@
+{
+  "name": "pain-bot",
+  "version": "1.0.0",
+  "description": "discord bot named pain",
+  "main": "index.js",
+  "scripts": {
+    "deploy:commands": "node src/deploy-commands.js",
+    "twitter": "node src/twitter/listen.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.3.4",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "needle": "^3.2.0"
+  }
+}
