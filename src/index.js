@@ -2,7 +2,7 @@
 
 const { Events } = require('discord.js');
 const { client } = require('./client');
-const { twitterFeedChannel } = require('./database');
+const { twitterFeedChannel } = require('./database/database');
 const env = require('./env');
 const listen = require('./twitter/listen');
 require('./interactions');

@@ -2,7 +2,7 @@ const {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
 } = require('discord.js');
-const { twitterFeedChannel } = require('../database');
+const { twitterFeedChannel } = require('../database/database');
 
 module.exports = {
   data: new SlashCommandBuilder()
