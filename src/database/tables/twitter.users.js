@@ -6,7 +6,6 @@ const TwitterUsers = orm.define('twitter_users', {
     type: Sequelize.NUMBER,
     unique: true,
   },
-  username: Sequelize.STRING,
 });
 
 module.exports = {
