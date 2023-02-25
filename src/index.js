@@ -2,8 +2,8 @@
 
 const { Events } = require('discord.js');
 const { client } = require('./client');
+const database = require('./database');
 const { twitterFeedChannel } = require('./database/database');
-const tables = require('./database/tables');
 const env = require('./env');
 const listen = require('./twitter/listen');
 require('./interactions');
@@ -31,7 +31,7 @@ listen.tweet$.subscribe(async (tweet) => {
 
 client.once(Events.ClientReady, async () => {
   console.log(`syncing orm`);
-  await tables.sync();
+  await database.sync();
   console.log(`sync success!`);
 });
 
