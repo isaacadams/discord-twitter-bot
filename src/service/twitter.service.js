@@ -1,6 +1,6 @@
 const rules = require('../twitter/rules');
 const user = require('../twitter/user');
-const { TwitterUsers } = require('../database').tables;
+const userRepo = require('./user.repo');
 
 module.exports = {
   /**
@@ -8,7 +8,8 @@ module.exports = {
    * @returns {{ id: string, name: string, link: string }[]}
    */
   getTwitterUsers: async () => {
-    const ids = await getAllUserIds();
+    const ids = await userRepo.getAllUserIds();
+
     if (ids.length < 1) return [];
     const users = await user.getByIds(...ids).catch(console.error);
 
@@ -31,12 +32,12 @@ module.exports = {
       throw 'could not find @' + twitterUsername;
     }
 
-    const ids = await getAllUserIds();
-    const profileId = parseInt(profile.data.id);
+    const ids = await userRepo.getAllUserIds();
+    const profileId = profile.data.id;
     if (ids.indexOf(profileId) < 0) {
       console.log('adding ' + profile.data.name + ' to the feed');
       ids.push(profileId);
-      TwitterUsers.create({ userid: profileId }).catch(console.error);
+      userRepo.addUser(profileId);
     } else {
       throw 'already following @' + twitterUsername;
     }
@@ -47,20 +48,10 @@ module.exports = {
   },
 
   resetRules: async () => {
-    const ids = await getAllUserIds();
+    const ids = await userRepo.getAllUserIds();
     await _resetRules(ids);
   },
 };
-
-/**
- *
- * @returns {number[]}
- */
-async function getAllUserIds() {
-  return (
-    await TwitterUsers.findAll({ attributes: ['userid'] }).catch(console.error)
-  ).map((r) => r.userid);
-}
 
 async function generateDeleteAll() {
   try {
@@ -116,3 +107,19 @@ function filterOutDuplicateRules(idsToDelete, errors) {
     }
   });
 }
+
+/* async function syncUsers(twitterIdsInDatabase) {
+  const { data } = await rules.get();
+
+  const idsMissingFromDatabase = data.flatMap((d) => {
+    const id = parseInt(d.value.slice(5));
+    if (twitterIdsInDatabase.include(id)) {
+      return [];
+    } else {
+      return [{ userid: id }];
+    }
+  });
+
+  TwitterUsers.bulkCreate(idsMissingFromDatabase);
+  return 
+} */
